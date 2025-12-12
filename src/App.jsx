@@ -8,7 +8,7 @@
    ============================================ */
 
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Home from './pages/Home';
 import Work from './pages/Work';
 import ProjectDetail from './pages/ProjectDetail';
@@ -18,11 +18,17 @@ import Contact from './pages/Contact';
 import { applyTextColors } from './data/textColors';
 
 function App() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Apply global text colors on mount
   useEffect(() => {
     applyTextColors();
   }, []);
+
+  // Close mobile menu when clicking a link
+  const handleLinkClick = () => {
+    setMobileMenuOpen(false);
+  };
 
   /* ==========================================
      EDIT NAVIGATION HERE
@@ -47,18 +53,36 @@ function App() {
         {/* NAVIGATION BAR */}
         <nav className="navbar">
           <div className="logo">
-            <Link to="/" style={{ color: 'inherit', textDecoration: 'none' }}>
+            <Link to="/" style={{ color: 'inherit', textDecoration: 'none' }} onClick={handleLinkClick}>
               {businessName}
             </Link>
           </div>
-          <ul className="nav-links">
+
+          {/* Hamburger Menu Button (Mobile) */}
+          <button
+            className={`hamburger ${mobileMenuOpen ? 'active' : ''}`}
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle navigation menu"
+          >
+            <span className="hamburger-line"></span>
+            <span className="hamburger-line"></span>
+            <span className="hamburger-line"></span>
+          </button>
+
+          {/* Navigation Links */}
+          <ul className={`nav-links ${mobileMenuOpen ? 'mobile-open' : ''}`}>
             {navLinks.map((link, index) => (
               <li key={index}>
-                <Link to={link.path}>{link.name}</Link>
+                <Link to={link.path} onClick={handleLinkClick}>{link.name}</Link>
               </li>
             ))}
           </ul>
         </nav>
+
+        {/* Mobile Menu Overlay */}
+        {mobileMenuOpen && (
+          <div className="mobile-overlay" onClick={() => setMobileMenuOpen(false)}></div>
+        )}
 
         {/* PAGE ROUTES */}
         <Routes>
