@@ -45,7 +45,7 @@ function App() {
   /* ==========================================
      EDIT BUSINESS NAME HERE
      ========================================== */
-  const businessName = "Business Name";
+  const businessName = "Michael's Portfolio";
 
   return (
     <Router>
